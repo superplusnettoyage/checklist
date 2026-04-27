@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1B4F9E">
+<title>SUPERPLUS · Visite</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --blue:#1B4F9E;--blue-light:#E8F0FB;
+  --teal:#1A8C7A;--teal-light:#E6F5F2;
+  --bg:#F0F2F7;--card:#FFFFFF;--border:#E2E6EF;
+  --text:#0F1B35;--sub:#5C6B8A;--hint:#9AA5BE;
+  --red:#C0392B;--red-light:#FDECEA;
+  --radius:16px;--radius-sm:10px;
+}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.app-header{background:var(--blue);padding:16px 20px 20px;position:sticky;top:0;z-index:100}
+.app-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.app-logo{font-size:13px;font-weight:700;color:rgba(255,255,255,0.9);letter-spacing:0.06em}
+.app-badge{background:rgba(255,255,255,0.18);color:white;font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px}
+.app-title{font-size:22px;font-weight:700;color:white;line-height:1.2}
+.app-subtitle{font-size:13px;color:rgba(255,255,255,0.65);margin-top:2px}
+.tab-bar{display:flex;background:var(--blue);padding:0 20px;gap:4px}
+.tab-btn{flex:1;padding:10px 0 14px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.55);background:none;border:none;font-family:inherit;cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s}
+.tab-btn.active{color:white;border-bottom-color:white}
+.content{padding:16px 16px 100px}
+.card{background:var(--card);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.info-cell{background:var(--card);padding:14px 16px}
+.info-cell.full{grid-column:1/-1}
+.info-label{font-size:10px;font-weight:700;color:var(--hint);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px}
+.info-input{width:100%;border:none;background:transparent;font-size:15px;font-weight:500;color:var(--text);font-family:inherit;outline:none;padding:0}
+.info-input::placeholder{color:var(--hint)}
+.section-head{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--blue-light);border-bottom:1px solid var(--border)}
+.section-num{width:24px;height:24px;border-radius:50%;background:var(--blue);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.section-title{font-size:14px;font-weight:700;color:var(--blue)}
+.section-count{margin-left:auto;font-size:11px;font-weight:600;color:var(--hint)}
+.check-row{display:flex;align-items:flex-start;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border)}
+.check-row:last-child{border-bottom:none}
+.check-wrap{flex-shrink:0;margin-top:1px}
+.check-box{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s}
+.check-box.checked{background:var(--blue);border-color:var(--blue)}
+.check-box svg{display:none}
+.check-box.checked svg{display:block}
+.check-body{flex:1;min-width:0}
+.check-label{font-size:14px;font-weight:500;color:var(--text);line-height:1.4;cursor:pointer}
+.check-label.checked{color:var(--sub)}
+.check-input{width:100%;border:none;border-bottom:1px solid var(--border);background:transparent;font-size:13px;color:var(--sub);font-family:inherit;outline:none;padding:4px 0;margin-top:6px}
+.check-input::placeholder{color:var(--hint)}
+.check-input:focus{border-bottom-color:var(--blue)}
+.note-row{display:flex;align-items:center;gap:10px;padding:11px 16px;background:var(--teal-light);border-bottom:1px solid var(--border)}
+.note-row:last-child{border-bottom:none}
+.note-label{font-size:13px;font-weight:600;color:var(--teal);flex:1}
+.note-input{border:none;background:transparent;font-size:13px;color:var(--text);font-family:inherit;outline:none;text-align:right;width:120px;font-weight:600}
+.note-input::placeholder{color:var(--hint);font-weight:400}
+.synth-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.synth-cell{background:var(--card);padding:14px 16px}
+.synth-cell.full{grid-column:1/-1}
+.synth-label{font-size:10px;font-weight:700;color:var(--hint);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px}
+.synth-ta{width:100%;border:none;background:transparent;font-size:14px;color:var(--text);font-family:inherit;outline:none;resize:none;min-height:56px;line-height:1.5}
+.synth-ta::placeholder{color:var(--hint)}
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);padding:12px 16px;padding-bottom:max(12px,env(safe-area-inset-bottom));display:flex;gap:10px;z-index:100}
+.btn{flex:1;padding:14px 0;border-radius:var(--radius-sm);font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;border:none;transition:all 0.15s}
+.btn:active{transform:scale(0.97)}
+.btn-primary{background:var(--blue);color:white}
+.btn-secondary{background:var(--blue-light);color:var(--blue)}
+.btn-teal{background:var(--teal);color:white}
+.visit-card{background:var(--card);border-radius:var(--radius);margin-bottom:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+.visit-card-body{padding:16px}
+.visit-name{font-size:16px;font-weight:700;margin-bottom:2px}
+.visit-meta{font-size:13px;color:var(--sub);margin-bottom:10px}
+.visit-progress{height:4px;background:var(--border);border-radius:2px;margin-bottom:6px;overflow:hidden}
+.visit-progress-bar{height:100%;background:var(--blue);border-radius:2px}
+.visit-progress-label{font-size:11px;color:var(--sub);margin-bottom:12px}
+.visit-actions{display:flex;gap:8px}
+.visit-btn{flex:1;padding:11px 0;border-radius:var(--radius-sm);font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;border:none}
+.visit-btn.open{background:var(--blue);color:white}
+.visit-btn.pdf{background:var(--teal-light);color:var(--teal)}
+.visit-btn.del{background:var(--red-light);color:var(--red)}
+.empty-state{text-align:center;padding:48px 24px}
+.empty-icon{font-size:48px;margin-bottom:12px;opacity:0.3}
+.empty-text{font-size:16px;font-weight:600;color:var(--sub);margin-bottom:6px}
+.empty-sub{font-size:13px;color:var(--hint)}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:#0F1B35;color:white;padding:12px 20px;border-radius:30px;font-size:14px;font-weight:600;z-index:999;transition:transform 0.3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(20px)}
+.progress-top{height:3px;background:var(--border);margin:0 20px 10px;border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--teal);border-radius:2px;transition:width 0.4s}
+.progress-label{text-align:center;font-size:12px;color:var(--sub);margin-bottom:16px;font-weight:500}
+</style>
+</head>
+<body>
+<div class="app-header">
+  <div class="app-header-top">
+    <div class="app-logo">SUPERPLUS NETTOYAGE</div>
+    <div class="app-badge">TERRAIN</div>
+  </div>
+  <div class="app-title">Visite Prospect</div>
+  <div class="app-subtitle">Restauration · Bistrots · Brasseries</div>
+</div>
+<div class="tab-bar">
+  <button class="tab-btn active" id="tab-new" onclick="switchTab('new')">Nouvelle visite</button>
+  <button class="tab-btn" id="tab-hist" onclick="switchTab('hist')">Historique <span id="hist-count"></span></button>
+</div>
+
+<div id="view-new" class="content">
+  <div class="progress-top"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+  <div class="progress-label" id="prog-label">0 point coché</div>
+  <div class="card">
+    <div class="info-grid">
+      <div class="info-cell full"><div class="info-label">Établissement</div><input class="info-input" id="f-etab" type="text" placeholder="Le Lutétia — Île Saint-Louis" autocomplete="off"></div>
+      <div class="info-cell"><div class="info-label">Date</div><input class="info-input" id="f-date" type="date"></div>
+      <div class="info-cell"><div class="info-label">Interlocuteur</div><input class="info-input" id="f-contact" type="text" placeholder="Prénom, fonction" autocomplete="off"></div>
+      <div class="info-cell full"><div class="info-label">Tel / Email</div><input class="info-input" id="f-tel" type="text" placeholder="06 xx xx xx xx" autocomplete="off"></div>
+    </div>
+  </div>
+  <div id="checklist-sections"></div>
+  <div class="card">
+    <div class="section-head" style="background:#E6F5F2;border-bottom:1px solid #C5E8E2">
+      <div class="section-num" style="background:var(--teal)">✓</div>
+      <div class="section-title" style="color:var(--teal)">Synthèse & observations</div>
+    </div>
+    <div class="synth-grid">
+      <div class="synth-cell"><div class="synth-label">Zones retenues</div><textarea class="synth-ta" id="sy-zones" placeholder="Salle, cuisine, sanitaires…" rows="3"></textarea></div>
+      <div class="synth-cell"><div class="synth-label">Superficie (m²)</div><textarea class="synth-ta" id="sy-surface" placeholder="Ex: 120 m²" rows="3"></textarea></div>
+      <div class="synth-cell"><div class="synth-label">Fréquence / Horaire</div><textarea class="synth-ta" id="sy-freq" placeholder="Ex: 7j/7, 6h avant service" rows="3"></textarea></div>
+      <div class="synth-cell"><div class="synth-label">Agents / temps</div><textarea class="synth-ta" id="sy-agents" placeholder="Ex: 2 agents, 2h" rows="3"></textarea></div>
+      <div class="synth-cell"><div class="synth-label">Contraintes matériaux</div><textarea class="synth-ta" id="sy-mat" placeholder="Mosaïque, zinc, boiseries…" rows="3"></textarea></div>
+      <div class="synth-cell"><div class="synth-label">Points bloquants</div><textarea class="synth-ta" id="sy-blocks" placeholder="" rows="3"></textarea></div>
+      <div class="synth-cell full"><div class="synth-label">Notes libres</div><textarea class="synth-ta" id="sy-notes" placeholder="Impressions, suite à donner…" rows="4"></textarea></div>
+    </div>
+  </div>
+</div>
+
+<div id="view-hist" class="content" style="display:none">
+  <div id="hist-list"></div>
+</div>
+
+<div class="bottom-bar" id="bottom-new">
+  <button class="btn btn-secondary" onclick="resetForm()">Effacer</button>
+  <button class="btn btn-teal" onclick="exportPDF()">PDF</button>
+  <button class="btn btn-primary" onclick="saveVisit()">Sauvegarder</button>
+</div>
+<div class="bottom-bar" id="bottom-hist" style="display:none">
+  <button class="btn btn-primary" onclick="switchTab('new')">+ Nouvelle visite</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const SECTIONS=[
+  {num:"1",title:"Contexte",items:[
+    {label:"Pourquoi changent-ils de prestataire ?"},
+    {label:"Préavis en cours ? (durée)"},
+    {label:"Date de démarrage souhaitée"},
+    {label:"Décideur final — même personne ?"},
+    {label:"Autres devis en cours ?"},
+    {label:"Budget mensuel actuel"}
+  ]},
+  {num:"2",title:"Périmètre",items:[
+    {label:"Salle et espace client"},
+    {label:"Cuisine professionnelle"},
+    {label:"Bar et comptoir"},
+    {label:"Sanitaires clients"},
+    {label:"Sanitaires personnel"},
+    {label:"Entrée / façade / vitres extérieures"},
+    {label:"Terrasse couverte ou véranda"},
+    {label:"Local poubelles"},
+    {label:"Hotte et conduits d'extraction"},
+    {label:"Chambre froide"},
+    {label:"Superficie totale estimée (m²)",isNote:true}
+  ]},
+  {num:"3",title:"Sols",items:[
+    {label:"Revêtement salle (carrelage, parquet, mosaïque, béton ciré…)"},
+    {label:"Revêtement cuisine (antidérapant, grilles d'évacuation ?)"},
+    {label:"Revêtement sanitaires / entrée"},
+    {label:"Matériaux fragiles ou nobles à signaler ?"},
+    {label:"Taches ou problèmes récurrents"},
+    {label:"Machine disponible sur place ? (autolaveuse…)"},
+    {label:"Espace de stockage matériel sur place ?"}
+  ]},
+  {num:"4",title:"Horaires & Accès",items:[
+    {label:"Créneau : 6h avant service / après fermeture / jour de fermeture ?"},
+    {label:"7j/7 confirmé ? Y compris jours fériés ?"},
+    {label:"Jour(s) de fermeture hebdomadaire"},
+    {label:"Qui ouvre à l'heure d'intervention ?"},
+    {label:"Accès : clés / badge / digicode"},
+    {label:"Alarme ? Contact d'urgence à 6h ?"},
+    {label:"Personnel présent à l'heure d'intervention ?"}
+  ]},
+  {num:"5",title:"Cuisine & HACCP",items:[
+    {label:"Type de cuisine (française, asiatique, grillades…)"},
+    {label:"Volume moyen de couverts / jour"},
+    {label:"Encrassement : léger / modéré / intensif"},
+    {label:"Certificat nettoyage hotte à jour ? (obligatoire 1x/an)"},
+    {label:"Documentation interventions souhaitée ?"},
+    {label:"Exigences DDPP / Alim'confiance ?"}
+  ]},
+  {num:"6",title:"Fin de visite",items:[
+    {label:"Demander le contrat actuel (périmètre + tarif)"},
+    {label:"Récupérer l'email pour le devis"},
+    {label:"Confirmer délai devis : 24 à 48h"},
+    {label:"Laisser une carte de visite"},
+    {label:"Définir date de rappel"}
+  ]}
+];
+
+let state={checks:{},vals:{},noteVals:{}};
+
+function initState(){
+  state={checks:{},vals:{},noteVals:{}};
+  SECTIONS.forEach(s=>s.items.forEach((item,i)=>{
+    const id=`${s.num}_${i}`;
+    item.isNote?state.noteVals[id]='':((state.checks[id]=false),(state.vals[id]=''));
+  }));
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function buildChecklist(){
+  const wrap=document.getElementById('checklist-sections');
+  wrap.innerHTML='';
+  SECTIONS.forEach(s=>{
+    const checkedCount=s.items.filter((it,i)=>!it.isNote&&state.checks[`${s.num}_${i}`]).length;
+    const total=s.items.filter(it=>!it.isNote).length;
+    const card=document.createElement('div');
+    card.className='card';
+    let html=`<div class="section-head"><div class="section-num">${s.num}</div><div class="section-title">${s.title}</div><div class="section-count" id="sc-${s.num}">${checkedCount}/${total}</div></div>`;
+    s.items.forEach((item,i)=>{
+      const id=`${s.num}_${i}`;
+      if(item.isNote){
+        html+=`<div class="note-row"><span style="color:var(--teal);font-size:16px;flex-shrink:0">→</span><span class="note-label">${item.label}</span><input class="note-input" type="text" id="ni-${id}" placeholder="…" value="${esc(state.noteVals[id]||'')}" oninput="state.noteVals['${id}']=this.value"></div>`;
+      } else {
+        const ck=state.checks[id];
+        html+=`<div class="check-row" onclick="toggleCheck('${id}',event)">
+          <div class="check-wrap"><div class="check-box${ck?' checked':''}" id="cb-${id}"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1 5L5 9L12 1" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+          <div class="check-body">
+            <div class="check-label${ck?' checked':''}" id="cl-${id}">${item.label}</div>
+            <input class="check-input" type="text" id="vi-${id}" placeholder="Notes…" value="${esc(state.vals[id]||'')}" onclick="event.stopPropagation()" oninput="state.vals['${id}']=this.value">
+          </div>
+        </div>`;
+      }
+    });
+    card.innerHTML=html;
+    wrap.appendChild(card);
+  });
+  updateProgress();
+}
+
+function toggleCheck(id,e){
+  if(e.target.tagName==='INPUT') return;
+  state.checks[id]=!state.checks[id];
+  document.getElementById('cb-'+id).classList.toggle('checked',state.checks[id]);
+  document.getElementById('cl-'+id).classList.toggle('checked',state.checks[id]);
+  const snum=id.split('_')[0];
+  const s=SECTIONS.find(x=>x.num===snum);
+  const done=s.items.filter((it,i)=>!it.isNote&&state.checks[`${snum}_${i}`]).length;
+  const tot=s.items.filter(it=>!it.isNote).length;
+  document.getElementById('sc-'+snum).textContent=`${done}/${tot}`;
+  updateProgress();
+}
+
+function updateProgress(){
+  const total=Object.keys(state.checks).length;
+  const done=Object.values(state.checks).filter(Boolean).length;
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-label').textContent=`${done} / ${total} points cochés — ${pct}%`;
+}
+
+function collectForm(){
+  SECTIONS.forEach(s=>s.items.forEach((item,i)=>{
+    const id=`${s.num}_${i}`;
+    if(item.isNote){const n=document.getElementById('ni-'+id);if(n)state.noteVals[id]=n.value;}
+    else{const v=document.getElementById('vi-'+id);if(v)state.vals[id]=v.value;}
+  }));
+}
+
+function getFullData(){
+  collectForm();
+  return{
+    etab:document.getElementById('f-etab').value,
+    date:document.getElementById('f-date').value,
+    contact:document.getElementById('f-contact').value,
+    tel:document.getElementById('f-tel').value,
+    checks:{...state.checks},vals:{...state.vals},noteVals:{...state.noteVals},
+    synth:{
+      zones:document.getElementById('sy-zones').value,
+      surface:document.getElementById('sy-surface').value,
+      freq:document.getElementById('sy-freq').value,
+      agents:document.getElementById('sy-agents').value,
+      mat:document.getElementById('sy-mat').value,
+      blocks:document.getElementById('sy-blocks').value,
+      notes:document.getElementById('sy-notes').value
+    }
+  };
+}
+
+function saveVisit(){
+  const d=getFullData();
+  if(!d.etab.trim()){showToast('⚠️ Saisissez le nom de l\'établissement');return;}
+  localStorage.setItem('vst_'+Date.now(),JSON.stringify({...d,savedAt:new Date().toLocaleDateString('fr-FR')}));
+  showToast('✓ Visite sauvegardée');
+  updateHistCount();
+}
+
+function loadVisit(key){
+  const d=JSON.parse(localStorage.getItem(key));
+  if(!d) return;
+  initState();
+  document.getElementById('f-etab').value=d.etab||'';
+  document.getElementById('f-date').value=d.date||'';
+  document.getElementById('f-contact').value=d.contact||'';
+  document.getElementById('f-tel').value=d.tel||'';
+  if(d.checks)Object.assign(state.checks,d.checks);
+  if(d.vals)Object.assign(state.vals,d.vals);
+  if(d.noteVals)Object.assign(state.noteVals,d.noteVals);
+  buildChecklist();
+  const sy=d.synth||{};
+  ['zones','surface','freq','agents','mat','blocks','notes'].forEach(k=>{const el=document.getElementById('sy-'+k);if(el)el.value=sy[k]||'';});
+  switchTab('new');window.scrollTo(0,0);
+  showToast('✓ Visite chargée');
+}
+
+function deleteVisit(key){
+  if(!confirm('Supprimer cette visite ?'))return;
+  localStorage.removeItem(key);renderHistory();updateHistCount();
+}
+
+function renderHistory(){
+  const list=document.getElementById('hist-list');
+  const keys=Object.keys(localStorage).filter(k=>k.startsWith('vst_')).sort().reverse();
+  updateHistCount(keys.length);
+  if(!keys.length){
+    list.innerHTML=`<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">Aucune visite sauvegardée</div><div class="empty-sub">Complétez une visite et appuyez sur Sauvegarder</div></div>`;
+    return;
+  }
+  list.innerHTML=keys.map(key=>{
+    const d=JSON.parse(localStorage.getItem(key));
+    const total=d.checks?Object.keys(d.checks).length:0;
+    const done=d.checks?Object.values(d.checks).filter(Boolean).length:0;
+    const pct=total?Math.round(done/total*100):0;
+    return `<div class="visit-card"><div class="visit-card-body">
+      <div class="visit-name">${esc(d.etab||'Sans nom')}</div>
+      <div class="visit-meta">${d.date||d.savedAt||''} · ${esc(d.contact||'—')}</div>
+      <div class="visit-progress"><div class="visit-progress-bar" style="width:${pct}%"></div></div>
+      <div class="visit-progress-label">${done}/${total} points cochés · ${pct}%</div>
+      <div class="visit-actions">
+        <button class="visit-btn open" onclick="loadVisit('${key}')">Ouvrir</button>
+        <button class="visit-btn pdf" onclick="exportPDFFromKey('${key}')">PDF</button>
+        <button class="visit-btn del" onclick="deleteVisit('${key}')">Suppr.</button>
+      </div>
+    </div></div>`;
+  }).join('');
+}
+
+function updateHistCount(n){
+  if(n===undefined)n=Object.keys(localStorage).filter(k=>k.startsWith('vst_')).length;
+  document.getElementById('hist-count').textContent=n>0?`(${n})`:'';
+}
+
+function switchTab(t){
+  document.getElementById('view-new').style.display=t==='new'?'block':'none';
+  document.getElementById('view-hist').style.display=t==='hist'?'block':'none';
+  document.getElementById('bottom-new').style.display=t==='new'?'flex':'none';
+  document.getElementById('bottom-hist').style.display=t==='hist'?'flex':'none';
+  document.getElementById('tab-new').classList.toggle('active',t==='new');
+  document.getElementById('tab-hist').classList.toggle('active',t==='hist');
+  if(t==='hist')renderHistory();
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2400);
+}
+
+function buildPDF(d){
+  const snames={1:'1. Contexte',2:'2. Périmètre',3:'3. Sols',4:'4. Horaires & Accès',5:'5. Cuisine & HACCP',6:'6. Fin de visite'};
+  let rows='';
+  SECTIONS.forEach(s=>{
+    rows+=`<tr><td colspan="3" style="background:#1B4F9E;color:white;font-weight:700;font-size:11px;padding:6px 10px">${snames[s.num]}</td></tr>`;
+    s.items.forEach((item,i)=>{
+      const id=`${s.num}_${i}`;
+      if(item.isNote){
+        rows+=`<tr style="background:#E6F5F2"><td style="width:22px;text-align:center;padding:5px 6px;font-size:13px">→</td><td style="font-size:11px;padding:5px 8px;font-style:italic;color:#1A8C7A">${item.label}</td><td style="font-size:11px;padding:5px 8px;font-weight:600">${esc(d.noteVals?.[id]||'')}</td></tr>`;
+      } else {
+        const ck=d.checks?.[id];
+        rows+=`<tr style="background:${ck?'#E8F0FB':'white'}"><td style="width:22px;text-align:center;padding:5px 6px;font-size:14px">${ck?'☑':'☐'}</td><td style="font-size:11px;padding:5px 8px;color:${ck?'#1B4F9E':'#0F1B35'}">${item.label}</td><td style="font-size:11px;padding:5px 8px;color:#5C6B8A">${esc(d.vals?.[id]||'')}</td></tr>`;
+      }
+    });
+  });
+  const sy=d.synth||{};
+  const sl=[['Zones retenues',sy.zones],['Superficie (m²)',sy.surface],['Fréquence / Horaire',sy.freq],['Agents / temps',sy.agents],['Contraintes matériaux',sy.mat],['Points bloquants',sy.blocks],['Notes libres',sy.notes]];
+  const synthRows=sl.map(([l,v])=>`<tr><td style="background:#E6F5F2;font-weight:600;font-size:11px;padding:6px 10px;width:36%;color:#1A8C7A;vertical-align:top">${l}</td><td style="font-size:11px;padding:6px 10px;white-space:pre-wrap;vertical-align:top">${esc(v||'')}</td></tr>`).join('');
+  const total=d.checks?Object.keys(d.checks).length:0;
+  const done=d.checks?Object.values(d.checks).filter(Boolean).length:0;
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Visite ${esc(d.etab||'')}</title>
+  <style>body{font-family:Arial,sans-serif;margin:20px;color:#0F1B35}table{width:100%;border-collapse:collapse}td{border:0.5px solid #E2E6EF;vertical-align:middle}h3{color:#1B4F9E;font-size:13px;margin:14px 0 6px}@media print{button{display:none}}</style></head><body>
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #1B4F9E;padding-bottom:10px;margin-bottom:14px">
+    <div><div style="font-size:16px;font-weight:700;color:#1B4F9E">SUPERPLUS NETTOYAGE</div><div style="font-size:10px;color:#5C6B8A">16 rue de Naples, 75008 Paris · 01 45 22 14 76</div></div>
+    <div style="text-align:right"><div style="font-size:12px;font-weight:700;color:#1B4F9E">FICHE DE VISITE PROSPECT</div><div style="font-size:10px;color:#5C6B8A">${done}/${total} points cochés</div></div>
+  </div>
+  <table style="margin-bottom:12px"><tr>
+    <td style="padding:6px 10px"><strong>Établissement :</strong> ${esc(d.etab||'')}</td>
+    <td style="padding:6px 10px"><strong>Date :</strong> ${esc(d.date||'')}</td>
+    <td style="padding:6px 10px"><strong>Interlocuteur :</strong> ${esc(d.contact||'')}</td>
+    <td style="padding:6px 10px"><strong>Tel / Mail :</strong> ${esc(d.tel||'')}</td>
+  </tr></table>
+  <table style="margin-bottom:14px">${rows}</table>
+  <h3>Synthèse et observations</h3>
+  <table>${synthRows}</table>
+  <div style="margin-top:16px;text-align:center"><button onclick="window.print()" style="background:#1B4F9E;color:white;border:none;padding:10px 24px;border-radius:6px;font-size:13px;cursor:pointer;font-weight:600">Imprimer / Enregistrer PDF</button></div>
+  </body></html>`;
+}
+
+function exportPDF(){const d=getFullData();const w=window.open('','_blank');w.document.write(buildPDF(d));w.document.close();}
+function exportPDFFromKey(key){const d=JSON.parse(localStorage.getItem(key));if(!d)return;const w=window.open('','_blank');w.document.write(buildPDF(d));w.document.close();}
+
+function resetForm(){
+  if(!confirm('Effacer le formulaire ?'))return;
+  initState();
+  ['f-etab','f-contact','f-tel'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
+  ['zones','surface','freq','agents','mat','blocks','notes'].forEach(k=>{const el=document.getElementById('sy-'+k);if(el)el.value='';});
+  buildChecklist();
+}
+
+initState();
+buildChecklist();
+document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
+updateHistCount();
+</script>
+</body>
+</html>
