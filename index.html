@@ -93,6 +93,30 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .progress-label{text-align:center;font-size:12px;color:var(--sub);margin-bottom:16px;font-weight:500}
 </style>
 </head>
+<style>
+.lock-screen{position:fixed;inset:0;background:var(--blue);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:32px}
+.lock-logo{font-size:15px;font-weight:700;color:rgba(255,255,255,0.7);letter-spacing:0.08em;margin-bottom:8px}
+.lock-title{font-size:28px;font-weight:700;color:white;margin-bottom:4px;text-align:center}
+.lock-sub{font-size:14px;color:rgba(255,255,255,0.6);margin-bottom:48px;text-align:center}
+.lock-icon{font-size:48px;margin-bottom:32px;opacity:0.9}
+.lock-input{width:100%;max-width:280px;background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.3);border-radius:12px;padding:16px 20px;font-size:18px;font-family:'Plus Jakarta Sans',sans-serif;color:white;outline:none;text-align:center;letter-spacing:0.1em;margin-bottom:12px}
+.lock-input::placeholder{color:rgba(255,255,255,0.4);letter-spacing:0}
+.lock-input:focus{border-color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.2)}
+.lock-btn{width:100%;max-width:280px;background:white;color:var(--blue);border:none;border-radius:12px;padding:16px;font-size:16px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:opacity 0.15s}
+.lock-btn:active{opacity:0.85}
+.lock-error{color:rgba(255,100,100,0.9);font-size:13px;font-weight:600;margin-top:8px;min-height:20px;text-align:center}
+</style>
+
+<div id="lock-screen" class="lock-screen">
+  <div class="lock-logo">SUPERPLUS NETTOYAGE</div>
+  <div class="lock-icon">🔒</div>
+  <div class="lock-title">Espace terrain</div>
+  <div class="lock-sub">Accès réservé à l'équipe</div>
+  <input class="lock-input" id="lock-input" type="password" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')checkPwd()">
+  <button class="lock-btn" onclick="checkPwd()">Accéder</button>
+  <div class="lock-error" id="lock-error"></div>
+</div>
+
 <body>
 <div class="app-header">
   <div class="app-header-top">
@@ -427,6 +451,22 @@ function resetForm(){
   document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
   ['zones','surface','freq','agents','mat','blocks','notes'].forEach(k=>{const el=document.getElementById('sy-'+k);if(el)el.value='';});
   buildChecklist();
+}
+
+const PWD='superplus2026Naples';
+function checkPwd(){
+  const v=document.getElementById('lock-input').value;
+  if(v===PWD){
+    localStorage.setItem('sp_auth','1');
+    document.getElementById('lock-screen').style.display='none';
+  } else {
+    document.getElementById('lock-error').textContent='Mot de passe incorrect';
+    document.getElementById('lock-input').value='';
+    setTimeout(()=>document.getElementById('lock-error').textContent='',2000);
+  }
+}
+if(localStorage.getItem('sp_auth')==='1'){
+  document.getElementById('lock-screen').style.display='none';
 }
 
 initState();
